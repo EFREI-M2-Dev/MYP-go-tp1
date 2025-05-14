@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"testing"
 )
 
@@ -100,6 +99,4 @@ func TestSaveAndLoadContacts(t *testing.T) {
 			t.Errorf("The loaded data does not match the saved data for %s", name)
 		}
 	}
-
-	os.Remove(REPERTOIREJSON)
 }
