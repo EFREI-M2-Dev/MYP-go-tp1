@@ -25,18 +25,24 @@ func main() {
 		updateContact(*name, *number, repertoire)
 	case "help":
 	default:
-		fmt.Println("--flag [list|add|remove|update|help]")
+		printHelp()
 	}
 }
 
-func printContacts(contacts map[string]string) {
-	for name, number := range contacts {
-		fmt.Println(name + ": " + number + "\n")
+func printContacts(repertoire map[string]string) {
+	for name, number := range repertoire {
+		fmt.Printf("%s: %s\n", name, number)
 	}
 }
 
 func addContact(name string, number string, repertoire map[string]string) bool {
-	if !isNameAvailble(name, repertoire) {
+	if name == "" || number == "" {
+		fmt.Println("--name and --tel is required")
+		return false
+	}
+
+	if !isNameAvailable(name, repertoire) {
+		fmt.Println("Name already in use")
 		return false
 	}
 
@@ -52,8 +58,15 @@ func updateContact(name string, number string, repertoire map[string]string) {
 	repertoire[name] = number
 }
 
-func isNameAvailble(name string, repertoire map[string]string) bool {
+func isNameAvailable(name string, repertoire map[string]string) bool {
 	_, ok := repertoire[name]
 
 	return ok
+}
+
+func printHelp() {
+	fmt.Println("Usage:")
+	fmt.Println("--flag [list|help]")
+	fmt.Println("--flag remove --name NAME")
+	fmt.Println("--flag [add|update] --name NAME --tel NUMBER")
 }
