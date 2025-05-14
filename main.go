@@ -11,7 +11,7 @@ func main() {
 	number := flag.String("tel", "", "number")
 	flag.Parse()
 
-	var repertoire map[string]string //key: name, value: number
+	repertoire := make(map[string]string) //key: name, value: number
 
 	switch *action {
 	case "list":
