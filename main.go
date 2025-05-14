@@ -1,29 +1,59 @@
 package main
 
-import "flag"
-
-type contact struct {
-	firstname string
-	lastname  string
-	number    string
-}
+import (
+	"flag"
+	"fmt"
+)
 
 func main() {
-	
+	action := flag.String("action", "", "action to add")
+	name := flag.String("name", "", "nom")
+	number := flag.String("tel", "", "number")
+	flag.Parse()
+
+	var repertoire map[string]string //key: name, value: number
+
+	switch *action {
+	case "list":
+		printContacts(repertoire)
+
+	case "add":
+		addContact(*name, *number, repertoire)
+	case "remove":
+		removeContact(*name, repertoire)
+	case "update":
+		updateContact(*name, *number, repertoire)
+	case "help":
+	default:
+		fmt.Println("--flag [list|add|remove|update|help]")
+	}
 }
 
-func printContacts(contacts []contact) {}
-
-func addContact() bool {
-
+func printContacts(contacts map[string]string) {
+	for name, number := range contacts {
+		fmt.Println(name + ": " + number + "\n")
+	}
 }
 
-func removeContact() contact {
+func addContact(name string, number string, repertoire map[string]string) bool {
+	if !isNameAvailble(name, repertoire) {
+		return false
+	}
 
+	repertoire[name] = number
+	return true
 }
 
-func updateContact() contact {
-
+func removeContact(name string, repertoire map[string]string) {
+	delete(repertoire, name)
 }
 
-func isNameAvailble(name string) bool {}
+func updateContact(name string, number string, repertoire map[string]string) {
+	repertoire[name] = number
+}
+
+func isNameAvailble(name string, repertoire map[string]string) bool {
+	_, ok := repertoire[name]
+
+	return ok
+}
