@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"regexp"
 )
 
 const REPERTOIREJSON = "repertoire.json"
@@ -44,6 +45,11 @@ func saveContacts(repertoire map[string]string) {
 	}
 }
 
+func isValidTel(number string) bool {
+	matched, _ := regexp.MatchString(`^[0-9]{10}$`, number)
+	return matched
+}
+
 func main() {
 	action := flag.String("action", "", "action to add")
 	name := flag.String("name", "", "nom")
@@ -57,6 +63,10 @@ func main() {
 		printContacts(repertoire)
 
 	case "add":
+		if !isValidTel(*number) {
+			fmt.Println("Invalid telephone number")
+			return
+		}
 		addContact(*name, *number, repertoire)
 		saveContacts(repertoire)
 
@@ -65,6 +75,10 @@ func main() {
 		saveContacts(repertoire)
 
 	case "update":
+		if !isValidTel(*number) {
+			fmt.Println("Invalid telephone number")
+			return
+		}
 		updateContact(*name, *number, repertoire)
 		saveContacts(repertoire)
 
